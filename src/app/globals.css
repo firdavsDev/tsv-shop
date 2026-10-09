@@ -1,0 +1,159 @@
+@import "tailwindcss";
+@import "@fontsource-variable/jost";
+@import "@fontsource-variable/playfair-display";
+
+/*
+ * TSV tokens. Chrome (header, hero, footer) is always noir; the content area follows the theme.
+ * Light = "noir entrance, white gallery". Dark = "noir gallery". See the design spec.
+ */
+:root {
+  --noir: #121110;
+  --noir-2: #1c1a17;
+  --noir-3: #2a2621;
+  --gold: #d9bf95;
+  --cream: #efe8dd;
+
+  --bg: #ffffff;
+  --fg: #111111;
+  --muted: #5f5f5f;
+  --line: #e6e6e3;
+  --well: #f1f1f0;
+  --price: #111111;
+  --btn: #111111;
+  --btn-fg: #ffffff;
+  --bar: #111111;
+  --bar-fg: #ffffff;
+  --bar-accent: #d9bf95;
+  --danger: #b3261e;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #121110;
+  --fg: #efe8dd;
+  --muted: #a39a8c;
+  --line: #2a2621;
+  --well: #1f1c19;
+  --price: #d9bf95;
+  --btn: #d9bf95;
+  --btn-fg: #121110;
+  --bar: #d9bf95;
+  --bar-fg: #121110;
+  --bar-accent: #121110;
+  --danger: #ff8a80;
+  color-scheme: dark;
+}
+
+/* No data-theme yet (JS off, or a page React rendered client-side): follow the system setting. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #121110;
+    --fg: #efe8dd;
+    --muted: #a39a8c;
+    --line: #2a2621;
+    --well: #1f1c19;
+    --price: #d9bf95;
+    --btn: #d9bf95;
+    --btn-fg: #121110;
+    --bar: #d9bf95;
+    --bar-fg: #121110;
+    --bar-accent: #121110;
+    --danger: #ff8a80;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-noir: var(--noir);
+  --color-noir-2: var(--noir-2);
+  --color-noir-3: var(--noir-3);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-well: var(--well);
+  --color-price: var(--price);
+  --color-btn: var(--btn);
+  --color-btn-fg: var(--btn-fg);
+  --color-bar: var(--bar);
+  --color-bar-fg: var(--bar-fg);
+  --color-bar-accent: var(--bar-accent);
+  --color-danger: var(--danger);
+  --font-sans: "Jost Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display Variable", "Didot", Georgia, serif;
+}
+
+/* Small uppercase letter-spaced UI label (12px floor). */
+@utility label {
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Horizontal photo/tab strip with native scroll-snap. */
+@utility snap-strip {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  & > * {
+    scroll-snap-align: start;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+.bg-noir :focus-visible {
+  outline-color: var(--gold);
+}
+
+/* Slide-in menu built on <dialog> (focus trap + Esc for free). */
+dialog.drawer {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: min(86vw, 360px);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+}
+dialog.drawer::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+dialog.drawer[open] {
+  animation: drawer-in 0.2s ease-out;
+}
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
